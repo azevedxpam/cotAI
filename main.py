@@ -1,14 +1,7 @@
+from cotacao import encontrar_menor_preco
+
 def apresentar():
   print("Olá, eu sou o CotAI!")
-
-def encontrar_menor_preco(fornecedores):
-  menor_preco = fornecedores[0]
-
-  for fornecedor in fornecedores:
-    if fornecedor["Preço"] < menor_preco["Preço"]:
-      menor_preco = fornecedor
-
-  return menor_preco
 
 def ler_preco():
   while True:
@@ -22,6 +15,7 @@ def ler_preco():
 
     except ValueError:
       print("Informe um preço válido.")
+
 
 
 def cadastrar_fornecedores():
@@ -55,7 +49,30 @@ def cadastrar_fornecedores():
 
   return fornecedores
 
+def ler_quantidade():
+  while True:
+    try: 
+      quantidade = int(input("Qual a quantidade? "))
+      if quantidade > 0:
+        return quantidade
+      print("A quantidade deve ser maior que 0.")
+
+    except ValueError:
+      print("Quantidade inválida.")
+
+def cadastrar_pedido():
+  produto = input("Qual produto você deseja cotar? ")
+  quantidade = ler_quantidade()
+
+  pedido = {
+    "Produto" : produto,
+    "Quantidade" : quantidade
+  }
+
+  return pedido
+
 apresentar()
+pedido = cadastrar_pedido()
 fornecedores = cadastrar_fornecedores()
 print()
 
@@ -65,6 +82,16 @@ for fornecedor in fornecedores:
 resultado = encontrar_menor_preco(fornecedores)
 
 print()
+print("===== COTAÇÃO =====")
+print("Produto:", pedido["Produto"])
+print("Quantidade:", pedido["Quantidade"])
+print()
 print("===== MELHOR COTAÇÃO =====")
-print("Fornecedor:", resultado["Nome"])
-print("Preço: R$", resultado["Preço"])
+if len(resultado) == 1:
+  print("Fornecedor:", resultado[0]["Nome"])
+  print("Preço: R$", resultado[0]["Preço"])
+else:
+  print("Empate entre os fornecedores:")
+  for fornecedor in resultado :
+    print(fornecedor["Nome"],"→ R$",fornecedor["Preço"])
+print()
